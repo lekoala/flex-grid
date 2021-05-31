@@ -1,5 +1,5 @@
 {
-  "name": "flex-grid",
+  "name": "flex-grid-element",
   "version": "1.0.0",
   "description": "A powerful flex based grid system",
   "main": "flex-grid.js",

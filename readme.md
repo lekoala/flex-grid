@@ -1,7 +1,7 @@
 # flex-grid
 
-[![NPM](https://nodei.co/npm/flex-grid.png?mini=true)](https://nodei.co/npm/flex-grid/)
-[![Downloads](https://img.shields.io/npm/dt/flex-grid.svg)](https://www.npmjs.com/package/flex-grid)
+[![NPM](https://nodei.co/npm/flex-grid-element.png?mini=true)](https://nodei.co/npm/flex-grid-element/)
+[![Downloads](https://img.shields.io/npm/dt/flex-grid-element.svg)](https://www.npmjs.com/package/flex-grid-element)
 
 A powerful flex based grid system
 
