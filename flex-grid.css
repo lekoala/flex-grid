@@ -1,0 +1,116 @@
+flex-grid {
+  --xs: 1;
+  --sm: 1;
+  --md: 1;
+  --xl: 1;
+  --xxl: 1;
+  --gx: 1;
+  --gy: 1;
+  --align: flex-start;
+  --justify: center;
+  --direction: row;
+  --wrap: wrap;
+  --mw: 10ch;
+  --unit: 1.5rem;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: var(--direction);
+          flex-direction: var(--direction);
+  -ms-flex-wrap: var(--wrap);
+      flex-wrap: var(--wrap);
+  -webkit-box-pack: var(--justify);
+      -ms-flex-pack: var(--justify);
+          justify-content: var(--justify);
+  -webkit-box-align: var(--align);
+      -ms-flex-align: var(--align);
+          align-items: var(--align);
+  margin-left: calc(-1 * var(--unit) * var(--gx));
+  margin-top: calc(-1 * var(--unit) * var(--gy));
+}
+flex-grid + flex-grid {
+  margin-top: 0;
+}
+flex-grid > * {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  display: var(--xs-d, "block");
+  /* autoprefixer: ignore next */
+  order: var(--o, 2);
+  max-width: var(--w, 100%);
+  min-width: var(--mw, 10ch);
+  -webkit-box-flex: var(--grow, 1);
+      -ms-flex: var(--grow, 1) 0 0%;
+          flex: var(--grow, 1) 0 0%;
+  -ms-flex-item-align: var(--align, "flex-start");
+      align-self: var(--align, "flex-start");
+  margin-right: 0;
+  margin-bottom: 0;
+  margin-left: calc(var(--unit) * var(--gx));
+  margin-top: calc(var(--unit) * var(--gy));
+}
+flex-grid[xs] > *, flex-grid[sm] > *, flex-grid[md] > *, flex-grid[lg] > *, flex-grid[xl] > *, flex-grid[xxl] > * {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+}
+flex-grid[sm] > *, flex-grid[md] > *, flex-grid[lg] > *, flex-grid[xl] > *, flex-grid[xxl] > * {
+  width: calc((100% - (var(--unit) * var(--gx))));
+}
+flex-grid[xs] > * {
+  width: calc((100% / var(--xs, 1)) - (var(--unit) * var(--gx)));
+}
+@media (min-width: 576px) {
+  flex-grid > * {
+    display: var(--sm-d, "inherit");
+  }
+  flex-grid[sm] > * {
+    width: calc((100% / var(--sm, 1)) - (var(--unit) * var(--gx)));
+  }
+}
+@media (min-width: 768px) {
+  flex-grid > * {
+    display: var(--md-d, var(--sm-d, "inherit"));
+  }
+  flex-grid[md] > * {
+    width: calc((100% / var(--md, 1)) - (var(--unit) * var(--gx)));
+  }
+}
+@media (min-width: 992px) {
+  flex-grid > * {
+    display: var(--lg-d, var(--md-d, var(--sm-d, "inherit")));
+  }
+  flex-grid[lg] > * {
+    width: calc((100% / var(--lg, 1)) - (var(--unit) * var(--gx)));
+  }
+}
+@media (min-width: 1200px) {
+  flex-grid > * {
+    display: var(--xl-d, var(--lg-d, var(--md-d, var(--sm-d, "inherit"))));
+  }
+  flex-grid[xl] > * {
+    width: calc((100% / var(--xl, 1)) - (var(--unit) * var(--gx)));
+  }
+}
+@media (min-width: 1400px) {
+  flex-grid > * {
+    display: var(--xxl-d, var(--xl-d, var(--lg-d, var(--md-d, var(--sm-d, "inherit")))));
+  }
+  flex-grid[xxl] > * {
+    width: calc((100% / var(--xxl, 1)) - (var(--unit) * var(--gx)));
+  }
+}
+
+.flex-grid-alternate > :nth-child(even) > :first-child {
+  /* autoprefixer: ignore next */
+  order: 3;
+}
+.flex-grid-alternate > :nth-child(even) > :last-child {
+  /* autoprefixer: ignore next */
+  order: 1;
+}
+
+/*# sourceMappingURL=flex-grid.css.map */

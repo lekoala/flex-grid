@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flex Grid Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/last-icon@1/last-icon.js"></script>
+    <script type="module" src="flex-grid.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/last-icon@1/last-icon.css"></link>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mvp.css@1.7.4/mvp.css" />
+    <link rel="stylesheet" href="flex-grid.css" />
+    <style>
+      /* Demo style */
+      flex-grid > div {
+        border:1px solid #ccc;
+        background:rgba(0,0,0,0.05);
+        padding:1em;
+      }
+      .outside {
+        background:rgb(155, 209, 155);
+        padding:2em;
+        position:absolute;
+        right:-4em;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>
+      Flex Grid</h1>
+      <p><em>A powerful flex based grid system</em></p>
+    </header>
+    <main>
+      <h2>Basic usage</h2>
+      <p>Any nested item will automatically be on a row</p>
+      <flex-grid>
+        <div>Col 1 Id amet sit consectetur ex do deserunt esse veniam tempor consectetur sit reprehenderit sunt. Fugiat ullamco sunt officia esse occaecat qui proident cillum culpa nisi et id. Aliqua excepteur irure do duis officia excepteur proident.</div>
+        <div>Col 2</div>
+        <div><div class="outside">Outside the box!</div></div>
+      </flex-grid>
+      <p>Regardless of its tag (here we have paragraphs)</p>
+      <flex-grid>
+        <p>Aliqua eu non aliqua cillum mollit Lorem qui ad enim sunt Lorem aliqua nulla nostrud. Veniam qui enim ad ea ullamco non non ut culpa duis laboris reprehenderit eu. Pariatur mollit elit incididunt labore amet irure non non occaecat. Ea officia exercitation culpa officia nostrud aliqua. Excepteur consectetur fugiat et dolore cupidatat est. Irure magna et proident quis occaecat id pariatur pariatur pariatur sunt.</p>
+        <p>Veniam deserunt voluptate ex enim ad sint ipsum. Tempor ut nulla et esse. Laboris mollit pariatur duis elit laborum aliquip in voluptate ipsum. Dolor adipisicing eiusmod in incididunt qui tempor nostrud do nulla duis.</p>
+      </flex-grid>
+      <h2>Setting number of columns</h2>
+      <p>Use the <code>xs</code> attribute. Extra small columns are NOT responsive.</p>
+      <flex-grid xs="2">
+        <div>Col 1</div>
+        <div>Col 2</div>
+        <div>Col 3</div>
+        <div>Col 4</div>
+        <div>Col 5</div>
+      </flex-grid>
+      <h2>Setting gutters</h2>
+      <p>Use the <code>g</code> global attribute or dedicated <code>gx</code> and <code>gy</code> attributes</p>
+      <flex-grid xs="2" g="0">
+        <div>Col 1</div>
+        <div>Col 2</div>
+        <div>Col 3</div>
+        <div>Col 4</div>
+        <div>Col 5</div>
+      </flex-grid>
+      <p>Here we change only the vertical gutter</p>
+      <flex-grid xs="2" gx="2" gy="0.5">
+        <div>Col 1</div>
+        <div>Col 2</div>
+        <div>Col 3</div>
+        <div>Col 4</div>
+        <div>Col 5</div>
+      </flex-grid>
+      <h2>Changing order</h2>
+      <p>Use the <code>--o</code> variable.</p>
+      <flex-grid xs="2">
+        <div style="--o:9">Col 1</div>
+        <div>Col 2</div>
+        <div>Col 3</div>
+        <div style="--o:1">Col 4</div>
+        <div>Col 5</div>
+      </flex-grid>
+      <h2>Alternate order</h2>
+      <p>Use the <code>flex-grid-alternate</code> helper class</p>
+      <div class="flex-grid-alternate">
+        <flex-grid xs="2" gutters="1">
+          <div>Left</div>
+          <div>Right</div>
+        </flex-grid>
+        <flex-grid xs="2" gutters="1">
+          <div>Left</div>
+          <div>Right</div>
+        </flex-grid>
+        <flex-grid xs="2" gutters="1">
+          <div>Left</div>
+          <div>Right</div>
+        </flex-grid>
+      </div>
+      <h2>Aligning grid items</h2>
+      <p>Use <code>start</code>, <code>center</code> or <code>end</code> with <code>align</code> or <code>justify</code> attributes</p>
+      <div style="overflow:hidden">
+      <flex-grid align="end" style="height:150px;background:rgb(155, 209, 155)">
+        <div>Col 1</div>
+        <div>Col 2</div>
+        <div>Col 3</div>
+      </flex-grid>
+      </div>
+      <br/>
+      <div style="overflow:hidden">
+      <flex-grid align="center" style="height:150px;background:rgb(155, 209, 155)">
+        <div>Col 1</div>
+        <div>Col 2</div>
+        <div>Col 3</div>
+      </flex-grid>
+      </div>
+      <p>You can align items individually</p>
+      <div style="overflow:hidden">
+      <flex-grid style="height:150px;background:rgb(155, 209, 155)">
+        <div style="--align:flex-start">Col 1</div>
+        <div style="--align:center">Col 2</div>
+        <div style="--align:flex-end">Col 3</div>
+      </flex-grid>
+      <p>Justify items</p>
+      <flex-grid xs="3" justify="start">
+        <div>Col 1</div>
+        <div>Col 2</div>
+      </flex-grid>
+      <flex-grid xs="3" justify="end">
+        <div>Col 1</div>
+        <div>Col 2</div>
+      </flex-grid>
+      <flex-grid xs="3" justify="end">
+        <div style="margin-left:auto">Col 1</div>
+        <div style="margin-left:auto">Col 2</div>
+      </flex-grid>
+
+      </div>
+
+      <h2>Nesting grids</h2>
+      <p>This works very nicely thanks to our negative margin top gutters</p>
+      <flex-grid xs="2" >
+        <div>
+          <flex-grid xs="2" g="0.5">
+            <div>1 left</div>
+            <div>2 left</div>
+            <div>3 left</div>
+            <div>4 left</div>
+          </flex-grid>
+        </div>
+        <div>Right</div>
+      </flex-grid>
+      <h2>Variable width</h2>
+      <p>Disable grow with <code>--grow:0</code> and use the <code>--w</code> variable</p>
+      <flex-grid>
+        <div style="--w:100px;--grow:0">Left</div>
+        <div>Center</div>
+        <div style="--w:100px;--grow:0">Right</div>
+      </flex-grid>
+      <h2>Responsive columns</h2>
+      <p>This is where the fun begins! Mix and match <code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code>, <code>xxl</code> attributes!</p>
+      <flex-grid  md="3" lg="4">
+        <div>col 1</div>
+        <div>col 2</div>
+        <div>col 3</div>
+        <div>col 4</div>
+      </flex-grid>
+      <p>Grid collapses on lower breakpoints by default. You can hide specific columns if needed. Visibility cascades up unless specified.</p>
+      <flex-grid md="4" lg="4" g="0">
+        <div>col 1</div>
+        <div>col 2</div>
+        <div style="--md-d:none; --xxl-d:block">col 3 is visible on xs and sm AND xxl</div>
+        <div>col 4</div>
+        <div>col 5</div>
+        <div style="--sm-d:none">col 6 is only visible on mobile</div>
+      </flex-grid>
+      <p>You can still play with our inline styles</p>
+      <flex-grid lg="4" g="0">
+        <div>col 1</div>
+        <div>col 2</div>
+        <div style="width:100%">col 3 is always 100%</div>
+        <div>col 4</div>
+        <div>col 5</div>
+        <div>col 6</div>
+      </flex-grid>
+      <br/>
+      <flex-grid lg="4" g="0">
+        <div>col 1</div>
+        <div>col 2</div>
+        <div style="width:auto">col 3 is always auto and changes according to content</div>
+        <div>col 4</div>
+        <div>col 5</div>
+        <div>col 6</div>
+      </flex-grid>
+      <h2>Hiding overflow</h2>
+      <p>Negative margin have overflow<br/><br/>Any maybe you don't see this!.</p>
+        <flex-grid  md="3" lg="4" style="background:rgb(155, 209, 155)">
+          <div>col 1</div>
+          <div>col 2</div>
+          <div>col 3</div>
+          <div>col 4</div>
+        </flex-grid>
+        <p>Wrap in overflow hidden if this is an issue.</p>
+      <div style="overflow:hidden">
+        <flex-grid  md="3" lg="4" style="background:rgb(155, 209, 155)">
+          <div>col 1</div>
+          <div>col 2</div>
+          <div>col 3</div>
+          <div>col 4</div>
+        </flex-grid>
+      </div>
+    </main>
+    <footer>
+      <hr />
+      Made with <l-i name="heart" set="em"></l-i> in <l-i name="be" set="fl"></l-i> by <a href="https://www.lekoala.be">LeKoala</a>
+    </footer>
+  </body>
+</html>
