@@ -6,6 +6,7 @@ const ALIASES = {
   start: "flex-start",
   end: "flex-end",
 };
+const GRID_ATTRS = ["g", "gx", "gy", "xs", "sm", "md", "lg", "xl", "xxl", "align", "justify", "mw", "unit", "direction", "wrap"];
 
 class FlexGrid extends HTMLElement {
   constructor() {
@@ -21,11 +22,11 @@ class FlexGrid extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["g", "gx", "gy", "xs", "sm", "md", "lg", "xl", "xxl", "align", "justify", "mw", "unit", "direction", "wrap"];
+    return GRID_ATTRS;
   }
 
-  attributeChangedCallback(attr, oldVal, newVal) {
-    let style = this.getAttribute("style");
+  static updateStyle(inst, attr, newVal) {
+    let style = inst.getAttribute("style");
     let rules = [];
     if (style) {
       rules = style.split(";");
@@ -44,13 +45,66 @@ class FlexGrid extends HTMLElement {
       });
       rules.push(dashAttr + ":" + newVal);
     }
-    this.setAttribute("style", rules.join(";"));
+    inst.setAttribute("style", rules.join(";"));
+  }
+
+  attributeChangedCallback(attr, oldVal, newVal) {
+    FlexGrid.updateStyle(this, attr, newVal);
   }
 
   connectedCallback() {
     // This is actually called AFTER attributeChangedCallback
-    // this.innerHTML = "<div class=\"flex-grid-wrapper\">" + this.innerHTML + "</div>";
+  }
+}
+
+class FlexCol extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  static get observedAttributes() {
+    return ["o", "w", "mw", "col", "align", "justify", "grow", "d-xs", "d-sm", "d-md", "d-lg", "d-xl", "d-xxl"];
+  }
+
+  attributeChangedCallback(attr, oldVal, newVal) {
+    FlexGrid.updateStyle(this, attr, newVal);
+  }
+
+  connectedCallback() {}
+}
+
+class FlexContainer extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  static get observedAttributes() {
+    return GRID_ATTRS;
+  }
+
+  attributeChangedCallback(attr, oldVal, newVal) {
+    let grid = this.querySelector("flex-grid");
+    if (grid) {
+      FlexGrid.updateStyle(grid, attr, newVal);
+    }
+  }
+
+  connectedCallback() {
+    // If there is no flex-grid, create it
+    if (this.querySelector("flex-grid") === null) {
+      this.innerHTML = "<flex-grid>" + this.innerHTML + "</flex-grid>";
+    }
+    let grid = this.querySelector("flex-grid");
+    Array.prototype.slice.call(this.attributes).forEach((item) => {
+      if (!GRID_ATTRS.includes(item.name)) {
+        return;
+      }
+      FlexGrid.updateStyle(grid, item.name, item.value);
+      grid.setAttribute(item.name, item.value);
+    });
   }
 }
 
 customElements.define("flex-grid", FlexGrid);
+customElements.define("flex-col", FlexCol);
+customElements.define("flex-container", FlexContainer);

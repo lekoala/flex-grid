@@ -10,10 +10,22 @@
     <link rel="stylesheet" href="flex-grid.css" />
     <style>
       /* Demo style */
-      flex-grid > div {
+      flex-grid:not(.unstyled) > div, flex-grid flex-col {
         border:1px solid #ccc;
         background:rgba(0,0,0,0.05);
         padding:1em;
+      }
+      /* This is for equal height when using padding */
+      flex-grid.unstyled > div {
+        display:flex;
+        flex-direction: column;
+      }
+      .demo-div {
+        border:1px solid #ccc;
+        background:rgba(0,0,0,0.05);
+        padding:1em;
+        display:flex;
+        flex:1 1 auto;
       }
       .outside {
         background:rgb(155, 209, 155);
@@ -31,13 +43,23 @@
     </header>
     <main>
       <h2>Basic usage</h2>
-      <p>Any nested item will automatically be on a row</p>
-      <flex-grid>
+      <p>Any nested item of a <code>flex-grid</code> will automatically be on a row</p>
+      <flex-grid class="unstyled">
+        <div class="">
+          <div class="demo-div">Col 1 Id amet sit consectetur ex do deserunt esse veniam tempor consectetur sit reprehenderit sunt. Fugiat ullamco sunt officia esse occaecat qui proident cillum culpa nisi et id. Aliqua excepteur irure do duis officia excepteur proident.</div>
+        </div>
+        <div class="">
+          <div class="demo-div">Col 2</div>
+        </div>
+        <div class=""><div class="demo-div"><div class="outside">Outside the box!</div></div></div>
+      </flex-grid>
+      <p>We also have a special <code>flex-container</code> that will create a nested flex-grid and forward all settings to it.</p>
+      <flex-container fluid>
         <div>Col 1 Id amet sit consectetur ex do deserunt esse veniam tempor consectetur sit reprehenderit sunt. Fugiat ullamco sunt officia esse occaecat qui proident cillum culpa nisi et id. Aliqua excepteur irure do duis officia excepteur proident.</div>
         <div>Col 2</div>
         <div><div class="outside">Outside the box!</div></div>
-      </flex-grid>
-      <p>Regardless of its tag (here we have paragraphs)</p>
+      </flex-container>
+      <p>It works with any nested tag (here we have paragraphs)</p>
       <flex-grid>
         <p>Aliqua eu non aliqua cillum mollit Lorem qui ad enim sunt Lorem aliqua nulla nostrud. Veniam qui enim ad ea ullamco non non ut culpa duis laboris reprehenderit eu. Pariatur mollit elit incididunt labore amet irure non non occaecat. Ea officia exercitation culpa officia nostrud aliqua. Excepteur consectetur fugiat et dolore cupidatat est. Irure magna et proident quis occaecat id pariatur pariatur pariatur sunt.</p>
         <p>Veniam deserunt voluptate ex enim ad sint ipsum. Tempor ut nulla et esse. Laboris mollit pariatur duis elit laborum aliquip in voluptate ipsum. Dolor adipisicing eiusmod in incididunt qui tempor nostrud do nulla duis.</p>
@@ -52,6 +74,12 @@
         <div>Col 5</div>
       </flex-grid>
       <h2>Setting gutters</h2>
+      <p>Gutters are calculed either with negative margin or a mix of horizontal padding and negative vertical margin. 
+        This is controlled by the <code>$enable-gutters-padding</code>. By default, we use negative margin.
+      </p>
+      <p>Use padding if you don't like hiding overflow and use negative margin if you don't like nesting tags. "unstyled" grids in demo 
+        should display the same regardless of the setting. You  can see they require additionnal "demo-div" to show the grid.
+      </p>
       <p>Use the <code>g</code> global attribute or dedicated <code>gx</code> and <code>gy</code> attributes</p>
       <flex-grid xs="2" g="0">
         <div>Col 1</div>
@@ -61,12 +89,12 @@
         <div>Col 5</div>
       </flex-grid>
       <p>Here we change only the vertical gutter</p>
-      <flex-grid xs="2" gx="2" gy="0.5">
-        <div>Col 1</div>
-        <div>Col 2</div>
-        <div>Col 3</div>
-        <div>Col 4</div>
-        <div>Col 5</div>
+      <flex-grid class="unstyled" xs="2" gx="2" gy="0.5">
+        <div><div class="demo-div">Col 1</div></div>
+        <div><div class="demo-div">Col 2</div></div>
+        <div><div class="demo-div">Col 3</div></div>
+        <div><div class="demo-div">Col 4</div></div>
+        <div><div class="demo-div">Col 5</div></div>
       </flex-grid>
       <h2>Changing order</h2>
       <p>Use the <code>--o</code> variable.</p>
@@ -77,22 +105,6 @@
         <div style="--o:1">Col 4</div>
         <div>Col 5</div>
       </flex-grid>
-      <h2>Alternate order</h2>
-      <p>Use the <code>flex-grid-alternate</code> helper class</p>
-      <div class="flex-grid-alternate">
-        <flex-grid xs="2" gutters="1">
-          <div>Left</div>
-          <div>Right</div>
-        </flex-grid>
-        <flex-grid xs="2" gutters="1">
-          <div>Left</div>
-          <div>Right</div>
-        </flex-grid>
-        <flex-grid xs="2" gutters="1">
-          <div>Left</div>
-          <div>Right</div>
-        </flex-grid>
-      </div>
       <h2>Aligning grid items</h2>
       <p>Use <code>start</code>, <code>center</code> or <code>end</code> with <code>align</code> or <code>justify</code> attributes</p>
       <div style="overflow:hidden">
@@ -126,12 +138,28 @@
         <div>Col 1</div>
         <div>Col 2</div>
       </flex-grid>
+      <p>Margin works as expected. <a href="https://css-tricks.com/the-peculiar-magic-of-flexbox-and-auto-margins/">If you are confused by flex and margin:auto, this is the way</a>.</p>
       <flex-grid xs="3" justify="end">
-        <div style="margin-left:auto">Col 1</div>
-        <div style="margin-left:auto">Col 2</div>
+        <div style="margin-left:auto">Col 1 with margin-left:auto</div>
+        <div style="">Col 2</div>
+      </flex-grid>
+      <flex-grid xs="3" justify="end">
+        <div style="margin-left:auto">Col 1 with margin-left:auto</div>
+        <div style="margin-left:auto">Col 2 with margin-left:auto</div>
       </flex-grid>
 
       </div>
+
+      <h2>Center horizontally and vertically</h2>
+
+      <p>Center using <code>g=0,align=center</code></p>
+      <flex-container style="width:300px;height:200px;background:rgb(155, 209, 155)" g=0 align="center">
+        <div style="--w:200px;height:100px;display:flex">I'm centered!</div>
+      </flex-container>
+      <p>You can use <code>margin:auto</code> too</p>
+      <flex-container style="width:300px;height:200px;background:rgb(155, 209, 155)" g=0>
+        <div style="--w:200px;height:100px;margin:auto;">I'm centered!</div>
+      </flex-container>
 
       <h2>Nesting grids</h2>
       <p>This works very nicely thanks to our negative margin top gutters</p>
@@ -153,22 +181,43 @@
         <div>Center</div>
         <div style="--w:100px;--grow:0">Right</div>
       </flex-grid>
+      <p>It's easier with <code>flex-col</code> elements and the <code>grow</code> attribute</p>
+      <flex-grid>
+        <flex-col>1 of 3</flex-col>
+        <flex-col grow="2">2 of 3 (wider)</flex-col>
+        <flex-col>3 of 3 (wider)</flex-col>
+      </flex-grid>
+      <p>Or with the <code>col</code> attribute if you need a specific size (2 = 50%, 3 = 33.33%, etc...).</p>
+      <flex-grid>
+        <flex-col>1 of 3</flex-col>
+        <flex-col col="2">2 of 3 (wider)</flex-col>
+        <flex-col>3 of 3 (wider)</flex-col>
+      </flex-grid>
+      <p>This example below is not very useful</p>
+      <flex-grid>
+        <flex-col col="2">1 of 2 with col=2</flex-col>
+        <flex-col col="2">2 of 2 with col=2</flex-col>
+      </flex-grid>
+      <p>You can have partial rows</p>
+      <flex-grid>
+        <flex-col col="3">The third of a row</flex-col>
+      </flex-grid>
       <h2>Responsive columns</h2>
       <p>This is where the fun begins! Mix and match <code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code>, <code>xxl</code> attributes!</p>
-      <flex-grid  md="3" lg="4">
-        <div>col 1</div>
-        <div>col 2</div>
-        <div>col 3</div>
-        <div>col 4</div>
+      <flex-grid md="3" lg="4">
+        <div>col 1 of md=3/lg=4</div>
+        <div>col 2 of md=3/lg=4</div>
+        <div>col 3 of md=3/lg=4</div>
+        <div>col 4 of md=3/lg=4</div>
       </flex-grid>
-      <p>Grid collapses on lower breakpoints by default. You can hide specific columns if needed. Visibility cascades up unless specified.</p>
+      <p>Grid collapses on lower breakpoints by default. You can hide specific columns if needed using <code>d-{breakpoint}</code>. Visibility cascades up unless specified.</p>
       <flex-grid md="4" lg="4" g="0">
         <div>col 1</div>
         <div>col 2</div>
-        <div style="--md-d:none; --xxl-d:block">col 3 is visible on xs and sm AND xxl</div>
+        <div style="--d-md:none; --d-xxl:block">col 3 is visible on xs and sm AND xxl</div>
         <div>col 4</div>
         <div>col 5</div>
-        <div style="--sm-d:none">col 6 is only visible on mobile</div>
+        <div style="--d-sm:none">col 6 is only visible on mobile</div>
       </flex-grid>
       <p>You can still play with our inline styles</p>
       <flex-grid lg="4" g="0">
@@ -205,7 +254,127 @@
           <div>col 4</div>
         </flex-grid>
       </div>
+
+      <p>Or use our custom <code>flex-container</code> with <code>overflow-hidden</code>.</p>
+      <flex-container overflow-hidden style="background:rgb(155, 209, 155)" xs="2" g="0.5">
+      <flex-grid class="unstyled">
+        <div><div class="demo-div">col 1</div></div>
+        <div><div class="demo-div">col 2</div></div>
+        <div><div class="demo-div">col 3</div></div>
+        <div><div class="demo-div">col 4</div></div>
+      </flex-grid>
+      </flex-container>
+
+      <h2>Use <code>flex-col</code></h2>
+
+      <p>Instead of regular divs, you can use a <code>flex-col</code> element. They allow setting individual column settings through attributes</p>
+
+      <flex-grid>
+        <flex-col grow="0" w="100px">col 1 with 100px</flex-col>
+        <flex-col o="1">col 2 goes first</flex-col>
+      </flex-grid>
+      <flex-grid>
+        <flex-col align="end">col 1 end</flex-col>
+        <flex-col align="start">col 2 start</flex-col>
+      </flex-grid>
+      <flex-grid>
+        <flex-col d-sm="none">col 1 is only visible on mobile</flex-col>
+        <flex-col>col 2 is always visible</flex-col>
+      </flex-grid>
+
     </main>
+
+    <section>
+    <h2>Advanced <code>flex-container</code></h2>
+  </section>
+
+  <p style="padding:0 1.5em;text-align:center">Flex container respect breakpoints expect if <code>fluid</code> is set</p>
+
+    <flex-container fluid>
+      <div>col 1 fluid</div>
+      <div>col 2 fluid</div>
+    </flex-container>
+
+    <p style="padding:0 1.5em;text-align:center">It can add padding if necessary with <code>pad</code>. You can pass an optional "dynamic" value which doubles the padding starting from md displays.</p>
+
+    <flex-container pad>
+      <div>col 1 pad</div>
+      <div>col 2 pad</div>
+    </flex-container>
+
+    <flex-container pad="dynamic">
+      <div>col 1 pad dynamic</div>
+      <div>col 2 pad dynamic</div>
+    </flex-container>
+
+    <p style="padding:0 1.5em;text-align:center">You can limit the size with <code>limit</code>.</p>
+
+    <flex-container limit="sm">
+    <flex-grid class="unstyled">
+      <div><div class="demo-div">col 1 limit sm</div></div>
+    </flex-grid>
+    </flex-container>
+
+    <flex-container limit="md">
+      <flex-grid class="unstyled">
+      <div><div class="demo-div">col 1 limit md</div></div>
+    </flex-grid>
+    </flex-container>
+
+    <flex-container limit="lg">
+      <flex-grid class="unstyled">
+      <div><div class="demo-div">col 1 limit lg</div></div>
+    </flex-grid>
+    </flex-container>
+
+    <flex-container limit="xl">
+    <flex-grid class="unstyled">
+      <div><div class="demo-div">col 1 limit xl</div></div>
+    </flex-grid>
+    </flex-container>
+
+    <p style="padding:0 1.5em;text-align:center">Or can be made fluid until a given breakpoint with <code>until</code> like in BS5.</p>
+
+      <flex-container until="sm">
+        <div>col 1 until sm</div>
+      </flex-container>
+  
+      <flex-container until="md">
+        <div>col 1 until md</div>
+      </flex-container>
+  
+      <flex-container until="lg">
+        <div>col 1 until lg</div>
+      </flex-container>
+  
+      <flex-container until="xl">
+        <div>col 1 until xl</div>
+      </flex-container>
+
+      <flex-container until="xxl">
+        <div>col 1 until xxl</div>
+      </flex-container>
+
+    <section>
+      <h2>Alternate order</h2>
+    </section>
+    <p style="padding:0 1.5em;text-align:center">Use the <code>alternate</code> attribute. <code>alternate</code> and <code>no-wrap</code> disable automatic flex-grid nested element.</p>
+
+    <flex-container pad alternate>
+      <flex-grid xs="2" gutters="1">
+        <div>Left</div>
+        <div>Right</div>
+      </flex-grid>
+      <flex-grid xs="2" gutters="1">
+        <div>Left</div>
+        <div>Right</div>
+      </flex-grid>
+      <flex-grid xs="2" gutters="1">
+        <div>Left</div>
+        <div>Right</div>
+      </flex-grid>
+    </div>
+
     <footer>
       <hr />
       Made with <l-i name="heart" set="em"></l-i> in <l-i name="be" set="fl"></l-i> by <a href="https://www.lekoala.be">LeKoala</a>

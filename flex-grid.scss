@@ -6,6 +6,75 @@ $grid-breakpoints: (
   xl: 1200px,
   xxl: 1400px,
 ) !default;
+$gutters: 1.5rem !default;
+$enable-flex-container: true !default;
+// This works like BS5 but needs nested elements
+$enable-gutters-padding: false !default;
+
+@if $enable-flex-container {
+  flex-container {
+    --gutters: 1.5rem;
+    display: block;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    flex-grid {
+      height: 100%;
+    }
+
+    &[overflow-hidden] {
+      overflow: hidden;
+    }
+
+    &[pad] {
+      padding-left: var(--gutters, #{$gutters});
+      padding-right: var(--gutters, #{$gutters});
+    }
+
+    &[pad="dynamic"] {
+      @media (min-width: map-get($map: $grid-breakpoints, $key: "md")) {
+        padding-right: $gutters * 2;
+        padding-left: $gutters * 2;
+      }
+    }
+    @each $name, $width in $grid-breakpoints {
+      @if $width > 0 {
+        // Limit max width to breakpoint to avoid reflow
+        @media (min-width: $width) {
+          max-width: calc(#{$width} - (var(--gutters, #{$gutters}) * 2));
+        }
+        // Limit the size of the container to the given responsive breakpoint
+        &[limit="#{$name}"] {
+          @media (min-width: $width) {
+            max-width: calc(#{$width} - (var(--gutters, #{$gutters}) * 2));
+          }
+        }
+        // Allow setting fluid containers until a given breakpoint
+        &[until="#{$name}"] {
+          @media (max-width: ($width - 0.02)) {
+            max-width: 100%;
+          }
+        }
+      }
+    }
+
+    &[fluid] {
+      max-width: 100%;
+    }
+
+    &[alternate] {
+      > :nth-child(even) {
+        > :first-child {
+          order: 3;
+        }
+        > :last-child {
+          order: 1;
+        }
+      }
+    }
+  }
+}
 
 flex-grid {
   --xs: 1;
@@ -15,21 +84,27 @@ flex-grid {
   --xxl: 1;
   --gx: 1;
   --gy: 1;
-  --align: flex-start;
+  --align: stretch;
   --justify: center;
   --direction: row;
   --wrap: wrap;
   --mw: 10ch;
-  --unit: 1.5rem;
+  --unit: #{$gutters};
 
   position: relative;
   display: flex;
   flex-direction: var(--direction);
   flex-wrap: var(--wrap);
   justify-content: var(--justify);
+  // auto|stretch|center|flex-start|flex-end|baseline|initial|inherit;
   align-items: var(--align);
-  margin-left: calc(-1 * var(--unit) * var(--gx));
   margin-top: calc(-1 * var(--unit) * var(--gy));
+  @if $enable-gutters-padding {
+    margin-left: calc(-0.5 * var(--unit) * var(--gx));
+    margin-right: calc(-0.5 * var(--unit) * var(--gx));
+  } @else {
+    margin-left: calc(-1 * var(--unit) * var(--gx));
+  }
 
   & + flex-grid {
     margin-top: 0;
@@ -38,19 +113,29 @@ flex-grid {
   > * {
     box-sizing: border-box;
     display: var(--xs-d, "block");
-    /* autoprefixer: ignore next */
-    order: var(--o, 2); // Support for order-first, order-last
+    // This way it's easy to have a first or last column with 1 and 3
+    order: var(--o, 2);
     max-width: var(--w, 100%);
     // By default, flex items won’t shrink below their minimum content size
     min-width: var(--mw, 10ch);
     // flex-grow: 1;flex-shrink: 0;flex-basis: 0%;
     flex: var(--grow, 1) 0 0%;
-    align-self: var(--align, "flex-start");
+    align-self: var(--align, "auto");
 
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: calc(var(--unit) * var(--gx));
     margin-top: calc(var(--unit) * var(--gy));
+    margin-bottom: 0;
+    @if $enable-gutters-padding {
+      padding-left: calc(0.5 * var(--unit) * var(--gx));
+      padding-right: calc(0.5 * var(--unit) * var(--gx));
+    } @else {
+      margin-left: calc(var(--unit) * var(--gx));
+      margin-right: 0;
+    }
+
+    &[col] {
+      flex: 0 0 auto;
+      width: calc(100% / var(--col) - (var(--unit) * var(--gx)));
+    }
   }
 
   &[xs],
@@ -65,25 +150,35 @@ flex-grid {
     }
   }
 
-  // Collapse by default on xs
+  // Collapse by default on xs without the need to specify xs="1"
   &[sm],
   &[md],
   &[lg],
   &[xl],
   &[xxl] {
     > * {
-      width: calc((100% - (var(--unit) * var(--gx))));
+      @if $enable-gutters-padding {
+        width: calc(100% / var(--xs, 1));
+      } @else {
+        width: calc((100% - (var(--unit) * var(--gx))));
+      }
     }
   }
 
   &[xs] > * {
-    width: calc((100% / var(--xs, 1)) - (var(--unit) * var(--gx)));
+    @if $enable-gutters-padding {
+      width: calc(100% / var(--xs, 1));
+    } @else {
+      width: calc((100% / var(--xs, 1)) - (var(--unit) * var(--gx)));
+    }
   }
+
+  // We cannot use each since we need our cascading display variable
 
   // Small devices (landscape phones, 576px and up)
   @media (min-width: map-get($map: $grid-breakpoints, $key: "sm")) {
     & > * {
-      display: var(--sm-d, "inherit");
+      display: var(--d-sm, "inherit");
     }
     &[sm] > * {
       width: calc((100% / var(--sm, 1)) - (var(--unit) * var(--gx)));
@@ -93,7 +188,7 @@ flex-grid {
   // Medium devices (tablets, 768px and up)
   @media (min-width: map-get($map: $grid-breakpoints, $key: "md")) {
     & > * {
-      display: var(--md-d, var(--sm-d, "inherit"));
+      display: var(--d-md, var(--d-sm, "inherit"));
     }
     &[md] > * {
       width: calc((100% / var(--md, 1)) - (var(--unit) * var(--gx)));
@@ -103,7 +198,7 @@ flex-grid {
   // Large devices (desktops, 992px and up)
   @media (min-width: map-get($map: $grid-breakpoints, $key: "lg")) {
     & > * {
-      display: var(--lg-d, var(--md-d, var(--sm-d, "inherit")));
+      display: var(--d-lg, var(--d-md, var(--d-sm, "inherit")));
     }
     &[lg] > * {
       width: calc((100% / var(--lg, 1)) - (var(--unit) * var(--gx)));
@@ -113,7 +208,7 @@ flex-grid {
   // X-Large devices (large desktops, 1200px and up)
   @media (min-width: map-get($map: $grid-breakpoints, $key: "xl")) {
     & > * {
-      display: var(--xl-d, var(--lg-d, var(--md-d, var(--sm-d, "inherit"))));
+      display: var(--d-xl, var(--d-lg, var(--d-md, var(--d-sm, "inherit"))));
     }
     &[xl] > * {
       width: calc((100% / var(--xl, 1)) - (var(--unit) * var(--gx)));
@@ -123,25 +218,10 @@ flex-grid {
   // XX-Large devices (larger desktops, 1400px and up)
   @media (min-width: map-get($map: $grid-breakpoints, $key: "xxl")) {
     & > * {
-      display: var(--xxl-d, var(--xl-d, var(--lg-d, var(--md-d, var(--sm-d, "inherit")))));
+      display: var(--d-xxl, var(--d-xl, var(--d-lg, var(--d-md, var(--d-sm, "inherit")))));
     }
     &[xxl] > * {
       width: calc((100% / var(--xxl, 1)) - (var(--unit) * var(--gx)));
     }
   }
 }
-
-.flex-grid-alternate {
-  > :nth-child(even) {
-    > :first-child {
-      /* autoprefixer: ignore next */
-      order: 3;
-    }
-    > :last-child {
-      /* autoprefixer: ignore next */
-      order: 1;
-    }
-  }
-}
-
-//TODO: implement mansonry https://tobiasahlin.com/blog/masonry-with-css/
