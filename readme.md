@@ -32,4 +32,4 @@ based on their attributes in css.
 
 ## Demo
 
-See demo.html
+See demo.html or https://codepen.io/lekoalabe/pen/ExWowBM
